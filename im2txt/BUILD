@@ -94,3 +94,15 @@ py_binary(
         "//im2txt/inference_utils:vocabulary",
     ],
 )
+
+py_binary(
+    name = "run_vid_inference",
+    srcs = ["run_vid_inference.py"],
+    srcs_version = "PY2AND3",
+    deps = [
+        ":configuration",
+        ":inference_wrapper",
+        "//im2txt/inference_utils:caption_generator",
+        "//im2txt/inference_utils:vocabulary",
+    ],
+)

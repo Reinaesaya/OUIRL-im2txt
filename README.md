@@ -1,6 +1,6 @@
 # OUIRL (Osaka University Intelligent Robotics Laboratory) im2txt
 
-Experimentation upon im2txt neural network model to process images/videos and hopefully generate conversation, in concurrence with a [chatterbot](https://github.com/Reinaesaya/OUIRL-ChatBot)
+Experimentation upon im2txt neural network model to process images/videos and hopefully generate conversation, in concurrence with a [chatterbot](https://github.com/Reinaesaya/OUIRL-ChatBot). Generating captions with video has rather tremendous lag and is pretty slow.
 
 - Contains a copy of the [im2txt repository](https://github.com/tensorflow/models/tree/master/im2txt). Please refer to this for detailed descriptions and instructions
 - Extra shell scripts made in reference to [im2txt_demo](https://github.com/siavash9000/im2txt_demo)
