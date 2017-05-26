@@ -2,7 +2,7 @@
 /bazel-ci_build-cache
 /bazel-genfiles
 /bazel-out
-/bazel-im2txt
+/bazel-OUIRL-im2txt
 /bazel-testlogs
 /bazel-tf
 
