@@ -1,8 +1,8 @@
 # OUIRL (Osaka University Intelligent Robotics Laboratory) im2txt
 
-Contains a copy of the [im2txt repository](https://github.com/tensorflow/models/tree/master/im2txt). Please refer to this for detailed descriptions and instructions.
-Extra shell scripts made in reference to [im2txt_demo](https://github.com/siavash9000/im2txt_demo)
-Pretrained models from [KranthiGV](https://github.com/KranthiGV/Pretrained-show-and-Tell-model)
+- Contains a copy of the [im2txt repository](https://github.com/tensorflow/models/tree/master/im2txt). Please refer to this for detailed descriptions and instructions
+- Extra shell scripts made in reference to [im2txt_demo](https://github.com/siavash9000/im2txt_demo)
+- Pretrained models from [KranthiGV](https://github.com/KranthiGV/Pretrained-show-and-Tell-model)
 
 ## Setup Overview
 
