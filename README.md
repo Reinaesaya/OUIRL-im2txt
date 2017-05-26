@@ -1,6 +1,6 @@
 # OUIRL (Osaka University Intelligent Robotics Laboratory) im2txt
 
-Experimentation upon im2txt neural network model to process images/videos and hopefully generate conversation, in concurrence with a [chatterbot](https://github.com/Reinaesaya/OUIRL-ChatBot). Generating captions with video has rather tremendous lag and is pretty slow.
+The OUIRL (Osaka University Intelligent Robotics Laboratory) im2txt is an experimental fork  upon the [Show and Tell Neural Network Model](https://github.com/tensorflow/models/tree/master/im2txt). The aim is to use this model to introduce visual stimuli into chatterbot conversation, in concurrence with the [OUIRL-ChatBot](https://github.com/Reinaesaya/OUIRL-ChatBot). Currently, video (webcam) caption generation is rather laggy and slow, so use at your own discretion.
 
 - Contains a copy of the [im2txt repository](https://github.com/tensorflow/models/tree/master/im2txt). Please refer to this for detailed descriptions and instructions
 - Extra shell scripts made in reference to [im2txt_demo](https://github.com/siavash9000/im2txt_demo)
@@ -34,9 +34,15 @@ First ensure that you have installed the following required packages (its sugges
 
 ### Running
 
-For generating picture for a single caption
+For generating captions for a single image
 
 ```
 ./process_image.sh /path/to/image.jpg
+```
+
+For generating captions for local webcam streaming on terminal:
+
+```
+./process_vid.sh
 ```
 
