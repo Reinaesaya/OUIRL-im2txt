@@ -6,5 +6,7 @@
 /bazel-testlogs
 /bazel-tf
 
+/pretrained_model/model.ckpt*.data*
+
 *.pyc
 *~
