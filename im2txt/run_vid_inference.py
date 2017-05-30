@@ -20,6 +20,7 @@ from __future__ import print_function
 
 import math
 import os
+import sys
 
 
 import tensorflow as tf
@@ -39,6 +40,10 @@ tf.flags.DEFINE_string("checkpoint_path", "",
                        "model checkpoint file.")
 tf.flags.DEFINE_string("vocab_file", "", "Text file containing the vocabulary.")
 
+tf.flags.DEFINE_string("input_files", "",
+                       "File pattern or comma-separated list of file patterns "
+                       "of video files.")
+
 tf.logging.set_verbosity(tf.logging.INFO)
 
 
@@ -53,7 +58,20 @@ def main(_):
 	# Create the vocabulary.
 	vocab = vocabulary.Vocabulary(FLAGS.vocab_file)
 
-	tf.logging.info("Running caption generation on webcam video")
+	filenames = []
+	for file_pattern in FLAGS.input_files.split(","):
+		if tf.gfile.Glob(file_pattern) == []:
+			tf.logging.info("Can't find file: "+str(file_pattern))
+			sys.exit()
+		filenames.extend(tf.gfile.Glob(file_pattern))
+
+	recorded_videos = False
+	if len(filenames)>0:
+		recorded_videos = True
+		tf.logging.info("Running caption generation on %d files matching %s",
+		              len(filenames), FLAGS.input_files)
+	else:
+		tf.logging.info("Running caption generation on webcam video")
 
 	with tf.Session(graph=g) as sess:
 		# Load the model from checkpoint.
@@ -64,26 +82,54 @@ def main(_):
 		# available beam search parameters.
 		generator = caption_generator.CaptionGenerator(model, vocab)
 
-		cap = cv2.VideoCapture(0)
-		cap.set(cv2.CAP_PROP_FPS, 0.5)
-		while(True):
-			ret, frame = cap.read()
 
-			frame_str = cv2.imencode('.jpg',frame)[1].tostring()
-			print('------')
-			captions = generator.beam_search(sess, frame_str)
-			for i, caption in enumerate(captions):
-				# Ignore begin and end words.
-				sentence = [vocab.id_to_word(w) for w in caption.sentence[1:-1]]
-				sentence = " ".join(sentence)
-				print("  %d) %s (p=%f)" % (i, sentence, math.exp(caption.logprob)))
+		if not recorded_videos:		# Use camera at default port
+			cap = cv2.VideoCapture(0)
+			cap.set(cv2.CAP_PROP_FPS, 0.5)
+			while(True):
+				ret, frame = cap.read()
 
-			gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-			cv2.imshow('frame',frame)
-			if cv2.waitKey(1) & 0xFF == ord('q'):
-				break
-		cap.release()
-		cv2.destroyAllWindows()
+				frame_str = cv2.imencode('.jpg',frame)[1].tostring()
+				print('------')
+				captions = generator.beam_search(sess, frame_str)
+				for i, caption in enumerate(captions):
+					# Ignore begin and end words.
+					sentence = [vocab.id_to_word(w) for w in caption.sentence[1:-1]]
+					sentence = " ".join(sentence)
+					print("  %d) %s (p=%f)" % (i, sentence, math.exp(caption.logprob)))
+
+				gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+				cv2.imshow('frame',frame)
+				if cv2.waitKey(1) & 0xFF == ord('q'):
+					break
+			cap.release()
+			cv2.destroyAllWindows()
+
+		else:											# Recorded video
+			for filename in filenames:
+				print(filename)
+				print(type(filename))
+				cap = cv2.VideoCapture(filename)
+				#cap.set(cv2.CAP_PROP_FPS, 0.5)
+				while(cap.isOpened()):
+					ret, frame = cap.read()
+					print("here2")
+
+					frame_str = cv2.imencode('.jpg',frame)[1].tostring()
+					print('------')
+					captions = generator.beam_search(sess, frame_str)
+					for i, caption in enumerate(captions):
+						# Ignore begin and end words.
+						sentence = [vocab.id_to_word(w) for w in caption.sentence[1:-1]]
+						sentence = " ".join(sentence)
+						print("  %d) %s (p=%f)" % (i, sentence, math.exp(caption.logprob)))
+
+					gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+					cv2.imshow('frame',frame)
+					if cv2.waitKey(1) & 0xFF == ord('q'):
+						break
+				cap.release()
+				cv2.destroyAllWindows()
 
 
 
